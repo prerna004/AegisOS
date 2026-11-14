@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisOS | AI-Native Agentic Enterprise Operating System</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 0. Desktop Window Frame (Active in Desktop App Mode) -->
+    <div id="desktop-titlebar">
+        <div class="window-controls">
+            <span class="window-dot dot-close" onclick="HitlManager.showToast('Application minimize/close is managed by desktop host window', 'amber')"></span>
+            <span class="window-dot dot-min" onclick="HitlManager.showToast('Minimized to tray', 'cyan')"></span>
+            <span class="window-dot dot-max" onclick="AegisApp.toggleDesktopMode()"></span>
+        </div>
+        <div style="font-weight:600; letter-spacing:0.02em;">AegisOS Enterprise Desktop — Production Pod Node 01</div>
+        <div>v3.0.0 (Local Sandbox + Cloud Synced)</div>
+    </div>
+
+    <!-- 1. Unified App Shell Layout -->
+    <div style="display:flex; height: calc(100vh - 0px); width: 100vw; overflow: hidden; position: relative;">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside style="width: 250px; background: #070b14; border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; z-index: 100; flex-shrink: 0;">
+            <div>
+                <!-- Brand Header -->
+                <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="AegisApp.switchModule('overview')">
+                    <img src="/favicon.svg" alt="Aegis" style="width: 28px; height: 28px;">
+                    <div>
+                        <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">AegisOS</div>
+                        <div style="font-size: 10px; color: #818cf8; font-weight: 500;">Agentic Enterprise OS</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Links List -->
+                <nav style="padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; max-height: calc(100vh - 160px); overflow-y: auto;">
+                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 6px 12px; letter-spacing: 0.05em;">CORE CONTROL</div>
+                    <button class="nav-item" data-module="overview" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>🚀</span> Cross-Suite Overview
+                    </button>
+                    <button class="nav-item" data-module="agents" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>🤖</span> Agent Swarm Studio
+                    </button>
+                    <button class="nav-item" data-module="developer" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>⚡</span> Developer & Extensibility
+                    </button>
+
+                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 10px 12px 6px; letter-spacing: 0.05em;">ZOHO ONE EQUIVALENT SUITE</div>
+                    <button class="nav-item" data-module="crm" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>💼</span> A: Sales & CRM
+                    </button>
+                    <button class="nav-item" data-module="marketing" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>📣</span> B: Marketing & CX
+                    </button>
+                    <button class="nav-item" data-module="support" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>🎧</span> C: Support & Service
+                    </button>
+                    <button class="nav-item" data-module="finance" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>💰</span> D: Finance & ERP
+                    </button>
+                    <button class="nav-item" data-module="hr" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>👥</span> E: HR & Workplace
+                    </button>
+                    <button class="nav-item" data-module="collab" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>💬</span> F: Collaboration Suite
+                    </button>
+                    <button class="nav-item" data-module="projects" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>🎯</span> G: Project Management
+                    </button>
+                    <button class="nav-item" data-module="itsm" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>🛡️</span> H: ITSM & MDM
+                    </button>
+                    <button class="nav-item" data-module="analytics" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
+                        <span>📊</span> I: BI & Low-Code iPaaS
+                    </button>
+                </nav>
+            </div>
+
+            <!-- User Footer Status -->
+            <div style="padding: 14px 16px; border-top: 1px solid var(--border-subtle); background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, #6366f1, #10b981); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff;">
+                        PC
+                    </div>
+                    <div>
+                        <div style="font-size:12px; font-weight:600; color:var(--text-primary);">Prerna Chotwani</div>
+                        <div style="font-size:10px; color:var(--text-muted);">Chief AI Architect</div>
+                    </div>
+                </div>
+                <button class="btn-secondary" style="padding:4px 6px; font-size:11px;" title="Memory Viewer" onclick="MemoryViewer.openModal()">
+                    🧠
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Center Workspace -->
+        <main id="main-workspace" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; transition: margin-right 0.3s cubic-bezier(0.16,1,0.3,1);">
+            
+            <!-- Global Top Bar -->
+            <header style="height: 54px; background: #070b14; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0;">
+                <!-- Left Search Trigger -->
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <button class="btn-secondary" style="padding:6px 14px; font-size:12px; display:flex; align-items:center; gap:10px; width:260px; justify-content:space-between; color:var(--text-muted);" onclick="AegisApp.toggleCommandPalette()">
+                        <span>🔍 Search or prompt anything...</span>
+                        <kbd style="background:rgba(255,255,255,0.08); border-radius:4px; padding:1px 5px; font-size:10px; font-family:var(--font-mono);">⌘K</kbd>
+                    </button>
+                    <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-secondary);">
+                        <span class="pulse-dot online"></span>
+                        <span>26 Agents Online</span>
+                        <span style="color:var(--border-strong);">•</span>
+                        <span style="color:#22d3ee; font-family:var(--font-mono);">P95: 38ms</span>
+                    </div>
+                </div>
+
+                <!-- Right Action Icons -->
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <!-- Pending Level 3 HITL Approvals Bell -->
+                    <button class="btn-secondary" style="position:relative; padding:6px 12px; font-size:12px;" onclick="AegisApp.switchModule('agents')" title="Pending Level 3 HITL approvals">
+                        <span>🔔 Approvals</span>
+                        <span id="hitl-badge" class="badge badge-rose" style="display:none; padding:1px 5px; font-size:9px; margin-left:4px;">0</span>
+                    </button>
+
+                    <!-- Interactive Swagger Docs Shortcut -->
+                    <a href="/docs" target="_blank" class="btn-secondary" style="text-decoration:none; padding:6px 12px; font-size:12px;" title="OpenAPI Documentation">
+                        📚 API Spec
+                    </a>
+
+                    <!-- Copilot Drawer Trigger -->
+                    <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="Copilot.toggle()">
+                        ✦ Copilot Drawer
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic Module Content Area -->
+            <div id="module-content-area" style="flex: 1; padding: 24px; overflow-y: auto;">
+                <!-- Module views render here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- 2. Global Command Palette (Cmd+K) Backdrop -->
+    <div id="command-palette-backdrop" onclick="if(event.target === this) AegisApp.closeCommandPalette()">
+        <div class="command-box">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); display:flex; align-items:center; gap:10px;">
+                <span style="font-size:16px;">🔍</span>
+                <input id="cmd-input" type="text" placeholder="Type a module name, agent action, or prompt (e.g. 'crm', 'deal desk', 'audit')..." 
+                    style="flex:1; background:transparent; border:none; outline:none; font-size:14px; color:var(--text-primary); font-family:inherit;" />
+                <kbd style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">ESC</kbd>
+            </div>
+            <div style="max-height:360px; overflow-y:auto; padding:8px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:6px 10px; font-weight:700;">Navigation Shortcuts</div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:crm')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>💼 Go to Sales & CRM (Twenty CRM / Documenso)</span>
+                    <span class="badge badge-indigo">Module A</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:finance')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>💰 Go to Finance, ERP & Supply Chain</span>
+                    <span class="badge badge-indigo">Module D</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:projects')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>🎯 Go to Project Management (Gantt & Scrum)</span>
+                    <span class="badge badge-indigo">Module G</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:developer')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>⚡ Developer API Gateway & OpenAPI 3.1</span>
+                    <span class="badge badge-emerald">Extensibility</span>
+                </div>
+
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:10px 10px 6px; font-weight:700;">Quick Autonomous Agent Triggers</div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-deal-desk:Evaluate CPQ discount matrix for Nordic Logistics')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>🔒 Run Deal Desk CPQ Margin Check (Triggers Level 3 HITL)</span>
+                    <span class="badge badge-rose">HITL Level 3</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-it-helpdesk:Diagnose disk usage alert on fleet-gw-nordic-418.iot')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>🛡️ Run Autonomous IT Helpdesk Endpoint Diagnostic</span>
+                    <span class="badge badge-rose">HITL Level 3</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-data-scientist:Translate natural language question to SQL')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>📊 Run Conversational Data Scientist (NL to SQL)</span>
+                    <span class="badge badge-cyan">Level 1 Auto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Frontend Application Scripts -->
+    <script src="/js/hitlManager.js"></script>
+    <script src="/js/memoryViewer.js"></script>
+    <script src="/js/copilot.js"></script>
+    <script src="/js/modules/crm.js"></script>
+    <script src="/js/modules/marketing.js"></script>
+    <script src="/js/modules/support.js"></script>
+    <script src="/js/modules/finance.js"></script>
+    <script src="/js/modules/hr.js"></script>
+    <script src="/js/modules/collab.js"></script>
+    <script src="/js/modules/projects.js"></script>
+    <script src="/js/modules/itsm.js"></script>
+    <script src="/js/modules/analytics.js"></script>
+    <script src="/js/modules/agentsView.js"></script>
+    <script src="/js/modules/developer.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
