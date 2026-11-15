@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#080c14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AegisOS">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>AegisOS | AI-Native Agentic Enterprise Operating System</title>
+    <script>
+        // Force unregister stale service worker & purge cache storage
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (regs) {
+                for (var r of regs) { r.unregister(); }
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(function (names) {
+                for (var name of names) { caches.delete(name); }
+            });
+        }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/app.css?v=3.12.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- 0. Desktop Window Frame (Active in Desktop App Mode) -->
     <div id="desktop-titlebar">
         <div class="window-controls">
-            <span class="window-dot dot-close" onclick="HitlManager.showToast('Application minimize/close is managed by desktop host window', 'amber')"></span>
+            <span class="window-dot dot-close"
+                onclick="HitlManager.showToast('Application minimize/close is managed by desktop host window', 'amber')"></span>
             <span class="window-dot dot-min" onclick="HitlManager.showToast('Minimized to tray', 'cyan')"></span>
             <span class="window-dot dot-max" onclick="AegisApp.toggleDesktopMode()"></span>
         </div>
@@ -24,68 +48,165 @@
     </div>
 
     <!-- 1. Unified App Shell Layout -->
-    <div style="display:flex; height: calc(100vh - 0px); width: 100vw; overflow: hidden; position: relative;">
-        
+    <div id="app-shell" style="display:flex; height: 100vh; width: 100vw; overflow: hidden; position: relative;">
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div id="sidebar-backdrop" onclick="AegisApp.closeMobileSidebar()"></div>
+
         <!-- Left Sidebar Navigation -->
-        <aside style="width: 250px; background: #070b14; border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; z-index: 100; flex-shrink: 0;">
+        <aside id="app-sidebar" class="app-sidebar">
             <div>
                 <!-- Brand Header -->
-                <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="AegisApp.switchModule('overview')">
-                    <img src="/favicon.svg" alt="Aegis" style="width: 28px; height: 28px;">
-                    <div>
-                        <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">AegisOS</div>
-                        <div style="font-size: 10px; color: #818cf8; font-weight: 500;">Agentic Enterprise OS</div>
+                <div
+                    style="padding: 16px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:10px; cursor: pointer;"
+                        onclick="AegisApp.switchModule('overview')">
+                        <img src="/favicon.svg" alt="Aegis" style="width: 28px; height: 28px;">
+                        <div>
+                            <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">
+                                AegisOS</div>
+                            <div style="font-size: 10px; color: #34d399; font-weight: 600;">All-in-One Business OS</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="badge badge-emerald" style="font-size:9px;">v3.0</span>
+                        <button class="mobile-sidebar-close btn-secondary" onclick="AegisApp.closeMobileSidebar()"
+                            style="padding:2px 8px; font-size:12px;" title="Close Menu">✕</button>
                     </div>
                 </div>
 
-                <!-- Navigation Links List -->
-                <nav style="padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; max-height: calc(100vh - 160px); overflow-y: auto;">
-                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 6px 12px; letter-spacing: 0.05em;">CORE CONTROL</div>
-                    <button class="nav-item" data-module="overview" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>🚀</span> Cross-Suite Overview
-                    </button>
-                    <button class="nav-item" data-module="agents" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>🤖</span> Agent Swarm Studio
-                    </button>
-                    <button class="nav-item" data-module="developer" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>⚡</span> Developer & Extensibility
+                <!-- Navigation Links List (Plain English for Non-Engineers) -->
+                <nav
+                    style="padding: 10px 8px; display: flex; flex-direction: column; gap: 3px; max-height: calc(100vh - 160px); overflow-y: auto;">
+                    <div
+                        style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 6px 12px; letter-spacing: 0.05em;">
+                        MASTER CONTROL</div>
+
+                    <button class="nav-item" data-module="overview"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">🚀</span>
+                        <div>
+                            <div style="color:#fff;">Business Overview</div>
+                            <div style="font-size:9.5px; color:var(--text-muted); font-weight:400;">Central company
+                                cockpit</div>
+                        </div>
                     </button>
 
-                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 10px 12px 6px; letter-spacing: 0.05em;">ZOHO ONE EQUIVALENT SUITE</div>
-                    <button class="nav-item" data-module="crm" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>💼</span> A: Sales & CRM
+                    <button class="nav-item" data-module="agents"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">🤖</span>
+                        <div>
+                            <div style="color:#fff;">26 AI Robot Helpers</div>
+                            <div style="font-size:9.5px; color:var(--text-muted); font-weight:400;">Automated agent
+                                workforce</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="marketing" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>📣</span> B: Marketing & CX
+
+                    <div
+                        style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 10px 12px 4px; letter-spacing: 0.05em;">
+                        BUSINESS DEPARTMENTS (ZOHO REPLACED)</div>
+
+                    <button class="nav-item" data-module="crm"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">💼</span>
+                        <div>
+                            <div style="color:#fff;">Sales & Deals (CRM)</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho CRM & Sign</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="support" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>🎧</span> C: Support & Service
+
+                    <button class="nav-item" data-module="finance"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">💰</span>
+                        <div>
+                            <div style="color:#fff;">Invoices & Money (ERP)</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Books</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="finance" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>💰</span> D: Finance & ERP
+
+                    <button class="nav-item" data-module="analytics"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">📊</span>
+                        <div>
+                            <div style="color:#fff;">Reports & Instant Answers</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Analytics</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="hr" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>👥</span> E: HR & Workplace
+
+                    <button class="nav-item" data-module="support"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">🎧</span>
+                        <div>
+                            <div style="color:#fff;">Customer Support</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Desk</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="collab" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>💬</span> F: Collaboration Suite
+
+                    <button class="nav-item" data-module="hr"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">👥</span>
+                        <div>
+                            <div style="color:#fff;">Employees & Holidays (HR)</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho People</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="projects" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>🎯</span> G: Project Management
+
+                    <button class="nav-item" data-module="marketing"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">📣</span>
+                        <div>
+                            <div style="color:#fff;">Marketing & Social</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Campaigns</div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="itsm" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>🛡️</span> H: ITSM & MDM
+
+                    <button class="nav-item" data-module="collab"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">💬</span>
+                        <div>
+                            <div style="color:#fff;">Team Chat & Email</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Mail & Cliq
+                            </div>
+                        </div>
                     </button>
-                    <button class="nav-item" data-module="analytics" style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:500; text-align:left; border:none; cursor:pointer;">
-                        <span>📊</span> I: BI & Low-Code iPaaS
+
+                    <button class="nav-item" data-module="projects"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">🎯</span>
+                        <div>
+                            <div style="color:#fff;">Projects & Gantt Tasks</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Zoho Projects</div>
+                        </div>
+                    </button>
+
+                    <button class="nav-item" data-module="itsm"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">🛡️</span>
+                        <div>
+                            <div style="color:#fff;">Laptop IT Security</div>
+                            <div style="font-size:9.5px; color:#34d399; font-weight:400;">Replaces Endpoint Central
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="nav-item" data-module="developer"
+                        style="display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-align:left; border:none; cursor:pointer;">
+                        <span style="font-size:15px;">⚡</span>
+                        <div>
+                            <div style="color:#fff;">Developer Gateway & APIs</div>
+                            <div style="font-size:9.5px; color:var(--text-muted); font-weight:400;">OpenAPI 3.1 &
+                                Swagger</div>
+                        </div>
                     </button>
                 </nav>
             </div>
 
             <!-- User Footer Status -->
-            <div style="padding: 14px 16px; border-top: 1px solid var(--border-subtle); background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between;">
+            <div
+                style="padding: 14px 16px; border-top: 1px solid var(--border-subtle); background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between;">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, #6366f1, #10b981); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff;">
+                    <div
+                        style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, #6366f1, #10b981); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff;">
                         PC
                     </div>
                     <div>
@@ -93,96 +214,261 @@
                         <div style="font-size:10px; color:var(--text-muted);">Chief AI Architect</div>
                     </div>
                 </div>
-                <button class="btn-secondary" style="padding:4px 6px; font-size:11px;" title="Memory Viewer" onclick="MemoryViewer.openModal()">
-                    🧠
-                </button>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <button class="btn-secondary" style="padding:4px 6px; font-size:11px;"
+                        title="Lock Session (Zero-Trust Guard)" onclick="AegisSecurity.lock()">
+                        🔒
+                    </button>
+                    <button class="btn-secondary" style="padding:4px 6px; font-size:11px;" title="Memory Viewer"
+                        onclick="MemoryViewer.openModal()">
+                        🧠
+                    </button>
+                </div>
             </div>
         </aside>
 
         <!-- Main Center Workspace -->
-        <main id="main-workspace" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; transition: margin-right 0.3s cubic-bezier(0.16,1,0.3,1);">
-            
-            <!-- Global Top Bar -->
-            <header style="height: 54px; background: #070b14; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0;">
-                <!-- Left Search Trigger -->
-                <div style="display:flex; align-items:center; gap:14px;">
-                    <button class="btn-secondary" style="padding:6px 14px; font-size:12px; display:flex; align-items:center; gap:10px; width:260px; justify-content:space-between; color:var(--text-muted);" onclick="AegisApp.toggleCommandPalette()">
-                        <span>🔍 Search or prompt anything...</span>
-                        <kbd style="background:rgba(255,255,255,0.08); border-radius:4px; padding:1px 5px; font-size:10px; font-family:var(--font-mono);">⌘K</kbd>
+        <main id="main-workspace"
+            style="flex: 1; min-width: 0; max-width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; position: relative;">
+
+            <!-- Global Top Bar (Adaptive Mobile & Laptop) -->
+            <header
+                style="height: 52px; background: #070b14; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; padding: 0 14px; flex-shrink: 0; min-width: 0;">
+                <!-- Left: Hamburger (Mobile) + Search + Heartbeat -->
+                <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                    <button id="mobile-menu-btn" class="btn-secondary" onclick="AegisApp.toggleMobileSidebar()"
+                        style="padding:6px 10px; font-size:15px;" title="Open Menu">
+                        ☰
                     </button>
-                    <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-secondary);">
+                    <button class="btn-secondary desktop-search-btn"
+                        style="padding:5px 10px; font-size:12px; display:flex; align-items:center; gap:8px; width:170px; justify-content:space-between; color:var(--text-muted);"
+                        onclick="AegisApp.toggleCommandPalette()">
+                        <span>🔍 Search...</span>
+                        <kbd
+                            style="background:rgba(255,255,255,0.08); border-radius:4px; padding:1px 5px; font-size:10px; font-family:var(--font-mono);">⌘K</kbd>
+                    </button>
+                    <button class="btn-secondary mobile-search-btn" style="padding:6px 10px; font-size:13px;"
+                        onclick="AegisApp.toggleCommandPalette()" title="Search">
+                        🔍
+                    </button>
+                    <div class="desktop-only-header"
+                        style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-secondary);">
                         <span class="pulse-dot online"></span>
-                        <span>26 Agents Online</span>
+                        <span style="font-weight:600;">26 Agents</span>
                         <span style="color:var(--border-strong);">•</span>
-                        <span style="color:#22d3ee; font-family:var(--font-mono);">P95: 38ms</span>
+                        <span style="color:#22d3ee; font-family:var(--font-mono);">38ms</span>
                     </div>
                 </div>
 
-                <!-- Right Action Icons -->
-                <div style="display:flex; align-items:center; gap:10px;">
+                <!-- Right Action Icons (Horizontally Scrollable so NEVER cut off) -->
+                <div id="header-actions"
+                    style="display:flex; align-items:center; gap:6px; flex-shrink:1; min-width:0; overflow-x:auto; scrollbar-width:none; max-width:100%; padding-left:8px;">
+                    <!-- Enterprise Zero-Trust Security Shield Badge -->
+                    <button class="btn-secondary"
+                        style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size:11px; font-weight:600; padding:4px 8px; display:flex; align-items:center; gap:5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisSecurity.openShieldModal()" title="Zero-Trust Security & SOC 2 Status">
+                        <span class="pulse-dot online" style="width:6px; height:6px;"></span>
+                        <span>Secured</span>
+                    </button>
+
+                    <!-- Session Lock Button -->
+                    <button class="btn-secondary"
+                        style="padding:4px 8px; font-size:11.5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisSecurity.lock()" title="Lock Dashboard (Zero-Trust Guard)">
+                        🔒
+                    </button>
+
+                    <!-- Admin Logout Button (Single, Clean) -->
+                    <button class="btn-secondary"
+                        style="padding:4px 8px; font-size:11.5px; white-space:nowrap; flex-shrink:0; height:30px; color:#fb7185; border-color:rgba(244,63,94,0.35); display:flex; align-items:center; gap:4px;"
+                        onclick="AegisSecurity.logout()" title="Log out of Enterprise Admin Dashboard">
+                        <span>🚪</span>
+                        <span class="desktop-only-header">Log Out</span>
+                    </button>
+
+                    <!-- Plain English Screen Explainer -->
+                    <button class="btn-secondary desktop-only-header"
+                        style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size:11px; font-weight:600; padding:4px 8px; display:flex; align-items:center; gap:5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisApp.toggleExplainerModal()" title="Plain-English explanation of this screen">
+                        <span>💡 Explainer</span>
+                    </button>
+
+                    <!-- Interviewer & Evaluator Cheatsheet -->
+                    <button class="btn-secondary desktop-only-header"
+                        style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; font-size:11px; font-weight:600; padding:4px 8px; display:flex; align-items:center; gap:5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisApp.toggleInterviewerGuide()" title="Technical Architecture & Interview Guide">
+                        <span>🎓 Guide</span>
+                    </button>
+
                     <!-- Pending Level 3 HITL Approvals Bell -->
-                    <button class="btn-secondary" style="position:relative; padding:6px 12px; font-size:12px;" onclick="AegisApp.switchModule('agents')" title="Pending Level 3 HITL approvals">
-                        <span>🔔 Approvals</span>
-                        <span id="hitl-badge" class="badge badge-rose" style="display:none; padding:1px 5px; font-size:9px; margin-left:4px;">0</span>
+                    <button class="btn-secondary"
+                        style="position:relative; padding:4px 8px; font-size:11.5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisApp.switchModule('agents')" title="Pending Level 3 HITL approvals">
+                        <span>🔔</span>
+                        <span id="hitl-badge" class="badge badge-rose"
+                            style="display:none; padding:1px 4px; font-size:9px; margin-left:3px;">0</span>
                     </button>
 
                     <!-- Interactive Swagger Docs Shortcut -->
-                    <a href="/docs" target="_blank" class="btn-secondary" style="text-decoration:none; padding:6px 12px; font-size:12px;" title="OpenAPI Documentation">
-                        📚 API Spec
+                    <a href="/docs" target="_blank" class="btn-secondary desktop-only-header"
+                        style="text-decoration:none; padding:4px 8px; font-size:11px; white-space:nowrap; flex-shrink:0; height:30px; display:inline-flex; align-items:center;"
+                        title="OpenAPI Documentation">
+                        📚 Docs
                     </a>
 
+                    <!-- Theme Switcher -->
+                    <button id="theme-toggle-btn" class="btn-secondary"
+                        style="padding:4px 8px; font-size:11.5px; white-space:nowrap; flex-shrink:0; height:30px;"
+                        onclick="AegisApp.toggleTheme()" title="Toggle Light / Dark Mode">
+                        ☀️
+                    </button>
+
                     <!-- Copilot Drawer Trigger -->
-                    <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="Copilot.toggle()">
-                        ✦ Copilot Drawer
+                    <button id="header-copilot-btn" class="btn-primary"
+                        style="padding:4px 10px; font-size:11.5px; white-space:nowrap; flex-shrink:0; height:30px; font-weight:600;"
+                        onclick="Copilot.toggle()">
+                        ✦ Copilot
                     </button>
                 </div>
             </header>
 
+            <!-- Non-Engineer & First-Time Evaluator Quick Bar (With ‹ › Chevrons & Wheel Scroll) -->
+            <div id="evaluator-top-bar-wrapper"
+                style="position: relative; width: 100%; flex-shrink: 0; background: linear-gradient(90deg, #1e1b4b 0%, #0f172a 50%, #064e3b 100%); border-bottom: 1px solid rgba(99,102,241,0.3); display: flex; align-items: center; min-width: 0;">
+
+                <!-- Scroll Left Arrow Button -->
+                <button id="eval-scroll-left-btn" onclick="AegisApp.scrollEvaluatorBar(-220)"
+                    style="height: 100%; padding: 0 9px; background: rgba(0,0,0,0.5); border: none; border-right: 1px solid rgba(255,255,255,0.1); color: #818cf8; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s;"
+                    onmouseover="this.style.background='rgba(99,102,241,0.3)'"
+                    onmouseout="this.style.background='rgba(0,0,0,0.5)'" title="Scroll left">
+                    ‹
+                </button>
+
+                <div id="evaluator-top-bar"
+                    style="flex: 1; min-width: 0; padding: 7px 10px; display: flex; align-items: center; justify-content: flex-start; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: rgba(99,102,241,0.4) transparent; gap: 8px; scroll-behavior: smooth;">
+                    <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                        <span style="font-size:13px;">🌟</span>
+                        <span style="font-size:11px; font-weight:700; color:#e0e7ff; white-space:nowrap;">Evaluator
+                            Hub:</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                        <button class="btn-primary"
+                            style="background:#4f46e5; border-color:#6366f1; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="Explainer.startGuidedTour()">
+                            🚀 60-Sec Tour
+                        </button>
+                        <button class="btn-secondary"
+                            style="background:rgba(245,158,11,0.15); border-color:#f59e0b; color:#fbbf24; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="Explainer.openZohoExplainer()">
+                            🏢 What is Zoho?
+                        </button>
+                        <button class="btn-secondary"
+                            style="background:rgba(52,211,153,0.15); border-color:#34d399; color:#34d399; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="Explainer.openFigureVerification()">
+                            🔍 Verify Figures ($195k & $805k)
+                        </button>
+                        <button class="btn-secondary"
+                            style="background:rgba(168,85,247,0.18); border-color:#a855f7; color:#c084fc; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="Explainer.openSwarmWarRoom()">
+                            🌐 Swarm War Room
+                        </button>
+                        <button class="btn-secondary"
+                            style="background:rgba(14,165,233,0.18); border-color:#0ea5e9; color:#38bdf8; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="Explainer.openBoardReport()">
+                            📊 Board ROI Report (-91%)
+                        </button>
+                        <button class="btn-secondary"
+                            style="background:rgba(34,211,238,0.15); border-color:#22d3ee; color:#22d3ee; padding:4px 9px; font-size:11px; font-weight:700; white-space:nowrap; flex-shrink:0;"
+                            onclick="AegisApp.toggleExplainerModal()">
+                            💡 Explain Screen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scroll Right Arrow Button -->
+                <button id="eval-scroll-right-btn" onclick="AegisApp.scrollEvaluatorBar(220)"
+                    style="height: 100%; padding: 0 9px; background: rgba(0,0,0,0.5); border: none; border-left: 1px solid rgba(255,255,255,0.1); color: #818cf8; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s;"
+                    onmouseover="this.style.background='rgba(99,102,241,0.3)'"
+                    onmouseout="this.style.background='rgba(0,0,0,0.5)'" title="Scroll right">
+                    ›
+                </button>
+            </div>
+
             <!-- Dynamic Module Content Area -->
-            <div id="module-content-area" style="flex: 1; padding: 24px; overflow-y: auto;">
+            <div id="module-content-area"
+                style="flex: 1; min-height: 0; min-width: 0; padding: 20px 24px 60px; overflow-y: auto; overflow-x: hidden;">
                 <!-- Module views render here -->
             </div>
         </main>
+
+        <!-- Right Persistent Copilot Panel (Flex Sibling) -->
+        <aside id="copilot-drawer" class="copilot-drawer"></aside>
     </div>
 
     <!-- 2. Global Command Palette (Cmd+K) Backdrop -->
     <div id="command-palette-backdrop" onclick="if(event.target === this) AegisApp.closeCommandPalette()">
         <div class="command-box">
-            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); display:flex; align-items:center; gap:10px;">
+            <div
+                style="padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); display:flex; align-items:center; gap:10px;">
                 <span style="font-size:16px;">🔍</span>
-                <input id="cmd-input" type="text" placeholder="Type a module name, agent action, or prompt (e.g. 'crm', 'deal desk', 'audit')..." 
+                <input id="cmd-input" type="text"
+                    placeholder="Type a module name, agent action, or prompt (e.g. 'crm', 'deal desk', 'audit')..."
                     style="flex:1; background:transparent; border:none; outline:none; font-size:14px; color:var(--text-primary); font-family:inherit;" />
                 <kbd style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">ESC</kbd>
             </div>
             <div style="max-height:360px; overflow-y:auto; padding:8px;">
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:6px 10px; font-weight:700;">Navigation Shortcuts</div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:crm')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div
+                    style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:6px 10px; font-weight:700;">
+                    Navigation Shortcuts</div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('action:explainer')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center; background:rgba(245, 158, 11, 0.08);">
+                    <span>💡 What Am I Looking At? (Plain-English Screen Explainer)</span>
+                    <span class="badge badge-amber">Explainer</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('action:interview')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center; background:rgba(99, 102, 241, 0.08);">
+                    <span>🎓 Technical Architecture & Interviewer Master Guide</span>
+                    <span class="badge badge-indigo">Cheatsheet</span>
+                </div>
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:crm')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>💼 Go to Sales & CRM (Twenty CRM / Documenso)</span>
                     <span class="badge badge-indigo">Module A</span>
                 </div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:finance')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:finance')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>💰 Go to Finance, ERP & Supply Chain</span>
                     <span class="badge badge-indigo">Module D</span>
                 </div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:projects')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:projects')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>🎯 Go to Project Management (Gantt & Scrum)</span>
                     <span class="badge badge-indigo">Module G</span>
                 </div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:developer')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('nav:developer')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>⚡ Developer API Gateway & OpenAPI 3.1</span>
                     <span class="badge badge-emerald">Extensibility</span>
                 </div>
 
-                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:10px 10px 6px; font-weight:700;">Quick Autonomous Agent Triggers</div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-deal-desk:Evaluate CPQ discount matrix for Nordic Logistics')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div
+                    style="font-size:10px; color:var(--text-muted); text-transform:uppercase; padding:10px 10px 6px; font-weight:700;">
+                    Quick Autonomous Agent Triggers</div>
+                <div class="cmd-item"
+                    onclick="AegisApp.handleCommandSelect('agent:agent-deal-desk:Evaluate CPQ discount matrix for Nordic Logistics')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>🔒 Run Deal Desk CPQ Margin Check (Triggers Level 3 HITL)</span>
                     <span class="badge badge-rose">HITL Level 3</span>
                 </div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-it-helpdesk:Diagnose disk usage alert on fleet-gw-nordic-418.iot')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div class="cmd-item"
+                    onclick="AegisApp.handleCommandSelect('agent:agent-it-helpdesk:Diagnose disk usage alert on fleet-gw-nordic-418.iot')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>🛡️ Run Autonomous IT Helpdesk Endpoint Diagnostic</span>
                     <span class="badge badge-rose">HITL Level 3</span>
                 </div>
-                <div class="cmd-item" onclick="AegisApp.handleCommandSelect('agent:agent-data-scientist:Translate natural language question to SQL')" style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div class="cmd-item"
+                    onclick="AegisApp.handleCommandSelect('agent:agent-data-scientist:Translate natural language question to SQL')"
+                    style="padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
                     <span>📊 Run Conversational Data Scientist (NL to SQL)</span>
                     <span class="badge badge-cyan">Level 1 Auto</span>
                 </div>
@@ -190,21 +476,48 @@
         </div>
     </div>
 
-    <!-- 3. Frontend Application Scripts -->
-    <script src="/js/hitlManager.js"></script>
-    <script src="/js/memoryViewer.js"></script>
-    <script src="/js/copilot.js"></script>
-    <script src="/js/modules/crm.js"></script>
-    <script src="/js/modules/marketing.js"></script>
-    <script src="/js/modules/support.js"></script>
-    <script src="/js/modules/finance.js"></script>
-    <script src="/js/modules/hr.js"></script>
-    <script src="/js/modules/collab.js"></script>
-    <script src="/js/modules/projects.js"></script>
-    <script src="/js/modules/itsm.js"></script>
-    <script src="/js/modules/analytics.js"></script>
-    <script src="/js/modules/agentsView.js"></script>
-    <script src="/js/modules/developer.js"></script>
-    <script src="/js/app.js"></script>
+    <!-- 2.5 Native Mobile Bottom Navigation Bar (Active on Mobile Phones & Tablets) -->
+    <nav id="mobile-bottom-nav" class="mobile-bottom-nav">
+        <button class="mob-nav-item active" data-module="overview" onclick="AegisApp.switchModule('overview')">
+            <span class="mob-icon">🏠</span>
+            <span class="mob-label">Overview</span>
+        </button>
+        <button class="mob-nav-item" data-module="agents" onclick="AegisApp.switchModule('agents')">
+            <span class="mob-icon">🤖</span>
+            <span class="mob-label">26 Agents</span>
+        </button>
+        <button class="mob-nav-item" data-module="crm" onclick="AegisApp.switchModule('crm')">
+            <span class="mob-icon">💼</span>
+            <span class="mob-label">Sales</span>
+        </button>
+        <button class="mob-nav-item" data-module="finance" onclick="AegisApp.switchModule('finance')">
+            <span class="mob-icon">💰</span>
+            <span class="mob-label">Finance</span>
+        </button>
+        <button class="mob-nav-item" onclick="Copilot.toggle()">
+            <span class="mob-icon" style="color:#818cf8;">✦</span>
+            <span class="mob-label" style="color:#818cf8; font-weight:700;">Copilot</span>
+        </button>
+    </nav>
+
+    <!-- 3. Frontend Application Scripts (Cache Busted v3.12.0) -->
+    <script src="/js/security.js?v=3.12.0"></script>
+    <script src="/js/hitlManager.js?v=3.12.0"></script>
+    <script src="/js/memoryViewer.js?v=3.12.0"></script>
+    <script src="/js/explainer.js?v=3.12.0"></script>
+    <script src="/js/copilot.js?v=3.12.0"></script>
+    <script src="/js/modules/crm.js?v=3.12.0"></script>
+    <script src="/js/modules/marketing.js?v=3.12.0"></script>
+    <script src="/js/modules/support.js?v=3.12.0"></script>
+    <script src="/js/modules/finance.js?v=3.12.0"></script>
+    <script src="/js/modules/hr.js?v=3.12.0"></script>
+    <script src="/js/modules/collab.js?v=3.12.0"></script>
+    <script src="/js/modules/projects.js?v=3.12.0"></script>
+    <script src="/js/modules/itsm.js?v=3.12.0"></script>
+    <script src="/js/modules/analytics.js?v=3.12.0"></script>
+    <script src="/js/modules/agentsView.js?v=3.12.0"></script>
+    <script src="/js/modules/developer.js?v=3.12.0"></script>
+    <script src="/js/app.js?v=3.12.0"></script>
 </body>
+
 </html>

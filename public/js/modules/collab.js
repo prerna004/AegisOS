@@ -146,7 +146,7 @@ const CollabModule = {
                         <span style="font-size:18px;">📹</span>
                         <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">LiveKit Meeting Room & Autonomous AI Scribe</h3>
                     </div>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <div style="background:#070b14; border:1px solid var(--border-subtle); border-radius:8px; padding:16px; font-size:12px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -161,7 +161,7 @@ const CollabModule = {
                     </div>
                 </div>
                 <div style="margin-top:14px; text-align:right;">
-                    <button class="btn-primary" onclick="Copilot.sendQuickPrompt('Extract action items from meeting transcript and auto-create tasks in Projects module', 'agent-meeting-scribe'); this.closest('div[style*=\\'position:fixed\\']').remove();">
+                    <button class="btn-primary" onclick="Copilot.sendQuickPrompt('Extract action items from meeting transcript and auto-create tasks in Projects module', 'agent-meeting-scribe'); this.closest('.glass-card').parentElement.remove();">
                         Extract Action Items & Sync to Projects
                     </button>
                 </div>
@@ -180,7 +180,7 @@ const CollabModule = {
                         <span style="font-size:18px;">🔐</span>
                         <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">Vaultwarden Zero-Knowledge Enterprise Password Vault</h3>
                     </div>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
                     <div class="glass-card" style="padding:10px 14px; background:rgba(255,255,255,0.02); display:flex; justify-content:space-between; align-items:center;">

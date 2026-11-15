@@ -178,12 +178,13 @@ const CrmModule = {
 
     openRouteIQModal() {
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
         modal.innerHTML = `
             <div class="glass-card" style="width:700px; max-width:90vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">RouteIQ Geospatial Route Optimization</h3>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
                     Multi-stop sales corridor optimizer factoring in real-time traffic and territory accounts:
@@ -195,7 +196,7 @@ const CrmModule = {
                     🚗 Total Distance: 34.2 km • Optimized fuel & time reduction: 24.8%
                 </div>
                 <div style="margin-top:14px; text-align:right;">
-                    <button class="btn-primary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">Dispatched to Field Rep Phone</button>
+                    <button class="btn-primary" onclick="this.closest('.glass-card').parentElement.remove()">Dispatched to Field Rep Phone</button>
                 </div>
             </div>
         `;
@@ -204,7 +205,8 @@ const CrmModule = {
 
     openDocumensoSignModal(quoteId = 'quote-801') {
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
         modal.innerHTML = `
             <div class="glass-card" style="width:650px; max-width:90vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -212,7 +214,7 @@ const CrmModule = {
                         <span style="font-size:18px;">✍️</span>
                         <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">Documenso Cryptographic Digital Signature</h3>
                     </div>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
                     Enforcing legally binding e-signatures with SHA-256 tamper-proof audit trails.
@@ -224,8 +226,8 @@ const CrmModule = {
                     <div style="margin-top:8px; color:#34d399;">✓ Cryptographic hash generated: 4f8b91a27e01bcf559...</div>
                 </div>
                 <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:8px;">
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">Cancel</button>
-                    <button class="btn-primary" onclick="HitlManager.showToast('Documenso envelope dispatched for electronic sign-off.', 'emerald'); this.closest('div[style*=\\'position:fixed\\']').remove();">
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">Cancel</button>
+                    <button class="btn-primary" onclick="HitlManager.showToast('Documenso envelope dispatched for electronic sign-off.', 'emerald'); this.closest('.glass-card').parentElement.remove();">
                         Dispatch Envelope
                     </button>
                 </div>

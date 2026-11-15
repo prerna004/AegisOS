@@ -167,32 +167,57 @@ const FinanceModule = {
     },
 
     openOcrModal() {
+        const existing = document.getElementById('ocr-receipt-modal');
+        if (existing) existing.remove();
+
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.id = 'ocr-receipt-modal';
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.remove();
+        };
+
         modal.innerHTML = `
-            <div class="glass-card" style="width:640px; max-width:90vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
+            <div class="glass-card" style="width:640px; max-width:90vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong); box-shadow:0 25px 60px rgba(0,0,0,0.8);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">Mobile Receipt Forensic OCR & Audit</h3>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:18px;">📷</span>
+                        <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">Mobile Receipt Forensic OCR & Audit</h3>
+                    </div>
+                    <button class="btn-secondary" onclick="document.getElementById('ocr-receipt-modal')?.remove()" style="padding:4px 10px; font-size:13px; cursor:pointer;" title="Close Modal (Esc)">✕</button>
                 </div>
                 <div style="background:#070b14; border:2px dashed var(--border-strong); border-radius:8px; padding:24px; text-align:center;">
                     <span style="font-size:32px;">📷</span>
                     <div style="font-size:13px; color:var(--text-primary); margin-top:8px;">Drag & Drop Receipt or Simulated Camera Upload</div>
                     <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">PNG, JPG, PDF up to 15MB</div>
-                    <button class="btn-primary" style="margin-top:14px;" onclick="FinanceModule.simulateOcrUpload(this)">
-                        Simulate Receipt OCR Scan
-                    </button>
+                    <div style="display:flex; justify-content:center; gap:10px; margin-top:14px;">
+                        <button class="btn-secondary" onclick="document.getElementById('ocr-receipt-modal')?.remove()" style="padding:8px 14px; font-size:12px; font-weight:600;">
+                            ← Cancel
+                        </button>
+                        <button class="btn-primary" onclick="FinanceModule.simulateOcrUpload(this)" style="padding:8px 16px; font-size:12px; font-weight:700;">
+                            Simulate Receipt OCR Scan
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
         document.body.appendChild(modal);
+
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
     },
 
     simulateOcrUpload(btn) {
         btn.innerHTML = 'Extracting line items & tax IDs...';
+        btn.disabled = true;
         setTimeout(() => {
             Copilot.sendQuickPrompt('Scan uploaded receipt for Camille Dubois and audit against company travel policy', 'agent-receipt-ocr');
-            btn.closest('div[style*="position:fixed"]').remove();
+            document.getElementById('ocr-receipt-modal')?.remove();
         }, 800);
     }
 };

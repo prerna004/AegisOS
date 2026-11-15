@@ -28,6 +28,13 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+    // Enterprise Zero-Trust Security Headers
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-Aegis-Security-Shield', 'Zero-Trust-Active');
+
     const parsedUrl = new url.URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
 

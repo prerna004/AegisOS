@@ -106,20 +106,28 @@ const SupportModule = {
     },
 
     openRemoteAssistModal() {
+        const existing = document.getElementById('rustdesk-modal');
+        if (existing) existing.remove();
+
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.id = 'rustdesk-modal';
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.remove();
+        };
+
         modal.innerHTML = `
-            <div class="glass-card" style="width:780px; max-width:92vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div class="glass-card" style="width:780px; max-width:92vw; background:#0b1120; padding:22px; border:1px solid var(--border-strong); box-shadow:0 25px 60px rgba(0,0,0,0.8);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:18px;">💻</span>
-                        <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">RustDesk Browser-Based Unattended Remote Assist</h3>
+                        <span style="font-size:20px;">💻</span>
+                        <h3 style="font-size:16px; font-weight:700; color:var(--text-primary);">RustDesk Browser-Based Unattended Remote Assist</h3>
                     </div>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="document.getElementById('rustdesk-modal')?.remove()" style="padding:4px 10px; font-size:13px; cursor:pointer;" title="Close Modal (Esc)">✕</button>
                 </div>
-                <div style="background:#05080e; border:1px solid var(--border-subtle); border-radius:8px; padding:20px; text-align:center;">
-                    <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Connected to Managed Host: <strong>fleet-gw-nordic-418.iot</strong></div>
-                    <div style="background:#000; border:1px solid #1e293b; border-radius:6px; height:180px; display:flex; align-items:center; justify-content:center; color:#22c55e; font-family:var(--font-mono); font-size:12px; text-align:left; padding:16px;">
+                <div style="background:#05080e; border:1px solid var(--border-subtle); border-radius:8px; padding:18px; text-align:center;">
+                    <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Connected to Managed Host: <strong style="color:#38bdf8;">fleet-gw-nordic-418.iot</strong></div>
+                    <div style="background:#000; border:1px solid #1e293b; border-radius:6px; height:180px; display:flex; align-items:center; justify-content:center; color:#22c55e; font-family:var(--font-mono); font-size:12px; text-align:left; padding:16px; line-height:1.6;">
                         root@fleet-gw-418:~# uptime<br>
                         12:08:12 up 48 days, 14:12, 1 user, load average: 0.14, 0.22, 0.18<br>
                         root@fleet-gw-418:~# df -h /<br>
@@ -128,15 +136,28 @@ const SupportModule = {
                         root@fleet-gw-418:~# _
                     </div>
                 </div>
-                <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                     <span style="font-size:11px; color:var(--accent-amber);">🔒 Level 3 Guardrail Active: Remote commands require HITL Authorization</span>
-                    <button class="btn-primary" onclick="Copilot.sendQuickPrompt('Diagnose disk usage alert on fleet-gw-nordic-418.iot and prepare clean script', 'agent-it-helpdesk'); this.closest('div[style*=\\'position:fixed\\']').remove();">
-                        Run IT Self-Healing Diagnostic
-                    </button>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-secondary" onclick="document.getElementById('rustdesk-modal')?.remove()" style="padding:8px 14px; font-size:12px; font-weight:600;">
+                            ← Go Back
+                        </button>
+                        <button class="btn-primary" onclick="Copilot.sendQuickPrompt('Diagnose disk usage alert on fleet-gw-nordic-418.iot and prepare clean script', 'agent-it-helpdesk'); document.getElementById('rustdesk-modal')?.remove();" style="padding:8px 16px; font-size:12px; font-weight:700;">
+                            Run IT Self-Healing Diagnostic
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
         document.body.appendChild(modal);
+
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
     }
 };
 

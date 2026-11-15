@@ -114,7 +114,8 @@ const ItsmModule = {
 
     openCmdbModal() {
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
         modal.innerHTML = `
             <div class="glass-card" style="width:720px; max-width:92vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -122,7 +123,7 @@ const ItsmModule = {
                         <span style="font-size:18px;">🗺️</span>
                         <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">CMDB Configuration Management Topology</h3>
                     </div>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <div style="background:#070b14; border:1px solid var(--border-subtle); border-radius:8px; padding:20px; font-size:12px; font-family:var(--font-mono); line-height:2; color:#a5b4fc;">
                     [Kubernetes K3s Cluster] ──> [PostgreSQL 17 Primary] ──> [pgvector RAG Store]<br>
@@ -131,7 +132,7 @@ const ItsmModule = {
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──> [Keycloak OIDC IdP] ──> [FleetDM Managed Endpoints (ast-01..04)]
                 </div>
                 <div style="margin-top:14px; text-align:right;">
-                    <button class="btn-primary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">Close Topology View</button>
+                    <button class="btn-primary" onclick="this.closest('.glass-card').parentElement.remove()">Close Topology View</button>
                 </div>
             </div>
         `;

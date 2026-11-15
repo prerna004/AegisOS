@@ -100,12 +100,13 @@ const MarketingModule = {
 
     openCroModal() {
         const modal = document.createElement('div');
-        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;`;
+        modal.style.cssText = `position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(6px);`;
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
         modal.innerHTML = `
             <div class="glass-card" style="width:720px; max-width:90vw; background:#0b1120; padding:20px; border:1px solid var(--border-strong);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <h3 style="font-size:16px; font-weight:600; color:var(--text-primary);">PostHog Privacy-First CRO Heatmaps & Funnels</h3>
-                    <button class="btn-secondary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">✕</button>
+                    <button class="btn-secondary" onclick="this.closest('.glass-card').parentElement.remove()">✕</button>
                 </div>
                 <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid var(--border-subtle); font-size:12px;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
@@ -129,7 +130,7 @@ const MarketingModule = {
                     </div>
                 </div>
                 <div style="margin-top:14px; text-align:right;">
-                    <button class="btn-primary" onclick="this.closest('div[style*=\\'position:fixed\\']').remove()">Apply A/B Test Variant</button>
+                    <button class="btn-primary" onclick="this.closest('.glass-card').parentElement.remove()">Apply A/B Test Variant</button>
                 </div>
             </div>
         `;
